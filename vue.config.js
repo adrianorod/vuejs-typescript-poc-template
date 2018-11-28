@@ -23,7 +23,7 @@ switch(runMode.mode) {
 }
 
 module.exports = {
-  baseUrl: productionPath,
+  baseUrl: applicationPath,
   outputDir: undefined,
   assetsDir: undefined,
   runtimeCompiler: undefined,
