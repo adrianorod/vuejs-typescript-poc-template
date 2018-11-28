@@ -12,10 +12,10 @@ Plus: mixins sass, bootstrap integrated and utils JS with helper functions
 ## Configuration
 
 1. API access:
-The project is prepared to use 2 links of API consults (a link for homol and a different link for production). Acess the vue.config.js and change the variable process.env.VUE_APP_APIURL with your API links for production and development.
+The project is prepared to use 2 links of API consults (a link for homol and a different link for production). Acess the **vue.config.js** and change the variable **process.env.VUE_APP_APIURL** with your API links for production and development.
 
 2. Assets configs:
-The recommended structure for assets (imgs, fonts, icons, etc.) is use a external link to use them. As this way, we not overload the project size and simplify the publish process. Acess the assets/scss_variables.scss archive and change the variables: $path-fonts, $path-images and $path-icons with your links.
+The recommended structure for assets (imgs, fonts, icons, etc.) is use a external link to use them. As this way, we not overload the project size and simplify the publish process. Acess the **assets/scss_variables.scss** archive and change the variables: `$path-fonts`, `$path-images` and `$path-icons` with your links.
 
 ## Instalation
 
