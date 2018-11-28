@@ -5,9 +5,8 @@ import { ExampleModel } from '@/models/example.model';
 
 export class ExampleService {
 
-  public static exampleGet(): ExampleModel {
+  public static exampleGet() {
     const url = Constants.EXAMPLESERVICE.exampleGet;
-
     return axios.get(url)
       .then(result => result.data.content)
       .then(result => {
