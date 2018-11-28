@@ -1,0 +1,28 @@
+// ============================== //
+// base
+// ============================== //
+html {
+  // define 1rem = 10px
+  // (10px/16px(browser default)) = 62.5%(1rem) 
+  font-size: 62.5%; 
+}
+body {
+  background-color: #000;
+}
+*:focus {
+  outline: none !important;
+}
+$scrollbar-size: 4px;
+::-webkit-scrollbar {
+  width: $scrollbar-size;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 ($scrollbar-size/2) rgba(0, 0, 0, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 ($scrollbar-size/2) rgba(0, 0, 0, 0.3);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,15 @@
+
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component({
+  components: {},
+  })
+export default class NotFoundView extends Vue {
+
+  constructor() {
+    super();
+  }
+
+  mounted() {}
+
+}

@@ -1,0 +1,266 @@
+@import 'variables';
+
+// ============================== //
+// typography
+// ============================== //
+@mixin font-import($family: null, $weight: null, $style: null, $file: null) {
+  font-family: '#{$family}';
+  font-weight: $weight;
+  font-style: $style;
+  src : url('#{$path-fonts}#{$file}.eot');
+  src : url('#{$path-fonts}#{$file}.eot?#iefix') format('embedded-opentype'),
+        url('#{$path-fonts}#{$file}.woff') format('woff')
+}
+
+@mixin font($family: null, $weight: null, $size: null, $color: null, $text-transform: null, $style: null) {
+  font-family: '#{$family}';
+  font-weight: $weight;
+  font-size: $size;
+  color: $color;
+  font-style: $style;
+  text-transform: $text-transform;
+}
+
+@function strip-units($number) {
+  @return $number / ($number * 0+1);
+}
+
+@function px-to-em($pixels, $context: $browser-context) {
+  @if (strip-units($pixels)) {
+    $pixels: $pixels * 1px;
+  }
+  @if (strip-units($context)) {
+    $context: $context * 1px;
+  }
+  @return $pixels / $context * 1em;
+}
+
+// ============================== //
+// box-model
+// ============================== //
+@mixin border-radius($radius) {
+  border-radius: $radius;
+  @include vendor-prefixes(border-radius, $radius);
+}
+
+@mixin flexbox() {
+  display: flex;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+}
+@mixin display-grid {
+  display: -ms-grid;
+  display: grid;
+}
+@mixin create-grid ($grid-columns, $template-columns, $gap) {
+  @include display-grid();
+  -ms-grid-columns: $grid-columns;
+  grid-template-columns: $template-columns;
+  gap: $gap;
+}
+// ============================== //
+// prefixes
+// ============================== //
+@mixin vendor-prefixes($property, $value) {
+  -webkit-#{$property}: $value;
+  -moz-#{$property}: $value;
+  -ms-#{$property}: $value;
+  -o-#{$property}: $value;
+}
+
+// ============================== //
+// opacity
+// ============================== //
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity=$opacity-ie); //IE8
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=#{$opacity * 100})";
+}
+
+// ============================== //
+// animation
+// ============================== //
+@mixin transition($args...) {
+  transition: $args;
+  @include vendor-prefixes(transition, $args);
+}
+@mixin grayscale($percent) {
+  -webkit-filter: grayscale($percent);
+  filter: grayscale($percent);
+}
+@mixin text-selection($args...) {
+  user-select: $args;
+  @include vendor-prefixes(select, $args);
+}
+
+// ============================== //
+// positioning
+// ============================== //
+@mixin absolute-center() {
+	position: absolute;
+	left: auto;
+	right: 50%;
+	top: auto;
+  bottom: 50%;
+  transform: translate(50%, 50%);
+}
+
+@mixin reset-absolute-position() {
+	position: relative;
+	left: auto;
+	right: auto;
+	top: auto;
+  bottom: auto;
+  transform: none;
+}
+
+@mixin absolute-vertical-align($left: auto, $right: auto) {
+	position: absolute;
+	left: $left;
+	right: $right;
+	top: auto;
+  bottom: 50%;
+  transform: translate(0%, 50%);
+}
+
+@mixin absolute-horizontal-align($top: auto, $bottom: auto) {
+	position: absolute;
+	left: auto;
+	right: 50%;
+	top: $top;
+  bottom: $bottom;
+  transform: translate(50%, 0%);
+}
+
+// ============================== //
+// images
+// ============================== //
+@mixin background-image($image) {
+  background-image: url('#{$path-images}#{$image}');
+  @include vendor-prefixes(background-size, cover);
+}
+
+// ============================== //
+// backdrop
+// ============================== //
+@mixin backdrop($opacity) {
+  background: rgba(0, 0, 0, $opacity);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 9;
+}
+
+// ============================== //
+// common
+// ============================== //
+@mixin show-it {
+  height: auto;
+  visibility: visible;
+  @include opacity(1);
+}
+
+@mixin hide-it {
+  position: absolute;
+  -webkit-transform: translate3d(-9999rem,0,0);
+  -moz-transform: translate3d(-9999rem,0,0);
+  transform: translate3d(-9999rem,0,0);
+  @include opacity(0);
+}
+
+// ============================== //
+// gradient
+// ============================== //
+
+@function convert-angle($value, $unit) {
+  $convertable-units: deg grad turn rad;
+  $conversion-factors: 1 (10grad/9deg) (1turn/360deg) (3.1415926rad/180deg);
+  @if index($convertable-units, unit($value)) and index($convertable-units, $unit) {
+    @return $value
+             / nth($conversion-factors, index($convertable-units, unit($value)))
+             * nth($conversion-factors, index($convertable-units, $unit));
+  }
+  
+  @warn "Cannot convert `#{unit($value)}` to `#{$unit}`.";
+}
+
+@function is-direction($value) {
+  $is-direction: index((to top, to top right, to right top, to right, to bottom right, to right bottom, to bottom, to bottom left, to left bottom, to left, to left top, to top left), $value);
+  $is-angle: type-of($value) == 'number' and index('deg' 'grad' 'turn' 'rad', unit($value));
+  
+  @return $is-direction or $is-angle;
+}
+
+@function legacy-direction($value) {
+  @if is-direction($value) == false {
+    @warn "Cannot convert `#{$value}` to legacy syntax because it doesn't seem to be an angle or a direction";
+  }
+  
+  $conversion-map: ( 
+    to top          : bottom,
+    to top right    : bottom left,
+    to right top    : left bottom,
+    to right        : left,
+    to bottom right : top left,
+    to right bottom : left top,
+    to bottom       : top,
+    to bottom left  : top right,
+    to left bottom  : right top,
+    to left         : right,
+    to left top     : right bottom,
+    to top left     : bottom right
+  );
+    
+  @if map-has-key($conversion-map, $value) {
+    @return map-get($conversion-map, $value);
+  }
+  
+  @return 90deg - convert-angle($value, 'deg');
+}
+
+@mixin linear-gradient($direction, $color-stops...) {
+  @if is-direction($direction) == false {
+    $color-stops: ($direction, $color-stops);
+    $direction: 180deg;
+  }
+  
+  background: nth(nth($color-stops, 1), 1);
+  background: -webkit-linear-gradient(legacy-direction($direction), $color-stops);
+  background: linear-gradient($direction, $color-stops);
+}
+
+// ============================== //
+// media queries
+// ============================== //
+@mixin desktop {
+  @media (min-width: #{$desktop}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: #{$tablet}) {
+    @content;
+  }
+}
+
+@mixin small-tablet {
+  @media (max-width: #{$small-tablet}) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: #{$mobile}) {
+    @content;
+  }
+}
+
+@mixin small-mobile {
+  @media (max-width: #{$small-mobile}) {
+    @content;
+  }
+}

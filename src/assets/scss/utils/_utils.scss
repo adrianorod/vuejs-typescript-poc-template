@@ -1,0 +1,57 @@
+.pointer {
+  cursor: pointer;
+}
+
+.no-hover {
+  cursor: default;
+}
+
+.disable-select {
+  @include text-selection(none);
+}
+
+.hide-it {
+  @include hide-it();
+}
+
+.show-it {
+  @include show-it();
+}
+
+$index-slug: z-index;
+@for $i from 1 through 10 {
+  .#{$index-slug}-#{$i*10} {
+    z-index: ($i * 10) !important;
+  }
+}
+
+$image-size-slug: image-size;
+@for $i from 1 through 10 {
+  .#{$image-size-slug}-#{$i*10} {
+    width: 0% + ($i * 10)
+  }
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+.scroll {
+  overflow: auto;
+}
+
+.scroll-y {
+  overflow-y: auto;
+}
+
+.scroll-x {
+  overflow-x: auto;
+}
